@@ -1,0 +1,2 @@
+first install passlib sqlachemy asyncpg alembic 
+
