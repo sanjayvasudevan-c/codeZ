@@ -37,7 +37,7 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str):
 
     try:
         from jose import jwt, JWTError
-        from config import SECRET_KEY, ALGORITHM
+        from auth import SECRET_KEY, ALGORITHM
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get("sub")
         user_email = payload.get("email")

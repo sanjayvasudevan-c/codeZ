@@ -7,6 +7,3 @@ async def create_db():
         await conn.run_sync(Base.metadata.create_all)
 
 asyncio.run(create_db())
-
-
-async def main():

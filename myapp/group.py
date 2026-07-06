@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from database import group_collection, message_collection
-from model import Group, Message
+from models import GroupDescription as Group, MessageDescription as Message, User
 from auth import get_current_user
 
 router = APIRouter(prefix="/groups", tags=["Group Management"])

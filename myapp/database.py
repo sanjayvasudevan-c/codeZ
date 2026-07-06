@@ -1,17 +1,17 @@
-from sqlachemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlachemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
 
 database_url = "postgresql+asyncpg://user:password@localhost/fastapi_db"
 
 engine = create_async_engine(
     database_url,
-    echo=true;
+    echo=True
 )
 
 async_localsession = sessionmaker(
     bind=engine,
-    class=AsyncSession,
+    class_=AsyncSession,
     expire_on_commit=False
 )
 

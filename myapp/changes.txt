@@ -1,0 +1,68 @@
+This file logs all changes made by the AI, including code, explanations, and reasons.
+
+PROPOSED CHANGES (Awaiting Approval):
+
+1. `create_db.py`:
+- Explanation: The file contains an incomplete function `async def main():` at the end which causes an `IndentationError`.
+- Code Change: Remove lines 11-12 (`async def main():`).
+
+2. `database.py`:
+- Explanation: There are syntax errors (`echo=true;` instead of `echo=True`), misspelled imports (`sqlachemy`), and invalid keyword arguments (`class=AsyncSession` instead of `class_=AsyncSession`).
+- Code Change: Fix typos and syntax.
+
+3. `model.py`:
+- Explanation: Contains typos (`sqlachemy`, `DelarativeBase`), unclosed parenthesis on `updated_at`, incorrect base class usage `user(base)` instead of `User(Base)`, and `mapped` instead of `Mapped`.
+- Code Change: Fix typos, class names, and close the parenthesis on line 18.
+
+4. `routes.py`:
+- Explanation: Indentation is completely missing for the function bodies of `send_otp`, `verify_otp`, `signup`, and `login`, leading to `IndentationError`.
+- Code Change: Add 4 spaces of indentation to the bodies of all these functions.
+
+5. `main.py`:
+- Explanation: The user requested a `main.py` file to act as the entry point and gather all the endpoints in one place.
+- Code Change: Created `main.py` which imports the routers from `routes.py` (auth), `group.py`, and `websocket.py`, and registers them to a FastAPI `app` instance.
+
+6. `model.py` renamed to `models.py`:
+- Explanation: Several files (`routes.py` and `create_db.py`) try to import from `models`, but the file was named `model.py`.
+- Code Change: Renamed `model.py` to `models.py` to fix the upcoming runtime `ModuleNotFoundError`.
+
+7. `group.py` import fix:
+- Explanation: In `group.py`, it was trying to import from `model` but the file was renamed to `models.py`.
+- Code Change: Changed `from model import ...` to `from models import ...`.
+
+8. `requirements.txt`:
+- Explanation: The application failed to run because the required Python packages (e.g., fastapi, uvicorn) were not installed.
+- Code Change: Created `requirements.txt` with all necessary dependencies to run the app.
+
+9. `models.py` import fix:
+- Explanation: The application failed to start because `DeclarativeBase` was being imported from `sqlalchemy` instead of `sqlalchemy.orm`.
+- Code Change: Changed `from sqlalchemy import DeclarativeBase` to `from sqlalchemy.orm import DeclarativeBase`.
+
+10. `models.py` import fix (mapped_column):
+- Explanation: `mapped_column` is also part of `sqlalchemy.orm`, not `sqlalchemy`.
+- Code Change: Moved `mapped_column` import to `sqlalchemy.orm`.
+
+11. `models.py` datetime import fix:
+- Explanation: The `datetime` module was used in the `User` model before it was imported (the import was further down the file).
+- Code Change: Moved `from datetime import datetime` to the top of the file.
+
+12. `group.py` missing imports fix:
+- Explanation: `group.py` attempted to import `Group` and `Message`, but they are named `GroupDescription` and `MessageDescription` in `models.py`. It also used `User` for type hinting but didn't import it.
+- Code Change: Imported `GroupDescription as Group` and `MessageDescription as Message`, and imported `User` from `models`.
+
+13. `models.py` User model mismatch:
+- Explanation: The `User` model had properties `name`, `phone_no`, and `hash_password`, but `routes.py` and the database schema expected `username`, `phone_number` (as str), and `hashed_password`.
+- Code Change: Renamed these properties in `models.py` to match `routes.py`.
+
+14. `routes.py` User property mismatch:
+- Explanation: The `login` endpoint attempted to set `user.last_login_at`, but the model specifies `user.last_login`.
+- Code Change: Changed `last_login_at` to `last_login`.
+
+15. `websocket.py` import mismatch:
+- Explanation: The websocket code imported `SECRET_KEY` and `ALGORITHM` from `config`, but no such file exists. These are defined in `auth.py`.
+- Code Change: Changed import source to `auth.py`.
+
+PROPOSED FEATURE: WebRTC Signaling
+16. WebRTC Signaling Server Implementation (Awaiting Approval):
+- Explanation: To support WebRTC (e.g., for video/audio calls or P2P data transfer), peers need to exchange SDP offers, SDP answers, and ICE candidates. We can implement a signaling mechanism using our existing WebSocket infrastructure.
+- Code Change: Update `websocket.py` to intercept specific message types (like `offer`, `answer`, and `ice-candidate`) and broadcast them to the target peers in the group instead of saving them as standard chat messages to the database.
