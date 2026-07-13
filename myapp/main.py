@@ -26,6 +26,9 @@ app.include_router(auth_router)
 app.include_router(group_router)
 app.include_router(websocket_router)
 
+from relay.routers.calls import router as calls_router
+app.include_router(calls_router)
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to MyApp API"}
