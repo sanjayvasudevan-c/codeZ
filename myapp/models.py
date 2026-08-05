@@ -17,22 +17,16 @@ class User(Base):
     created_at : Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at : Mapped[datetime] = mapped_column(default=datetime.utcnow, onupdate=datetime.utcnow)
     last_login : Mapped[datetime] = mapped_column(default=None)
-    identity_public_key : Mapped[str] = mapped_column(nullable=True)
-
-import uuid
-from sqlalchemy import String, Integer, DateTime, func
-
-def gen_uuid():
-    return str(uuid.uuid4())
+    identity_public_key = Column(String, nullable=True)
 
 class CallSession(Base):
     __tablename__ = "call_sessions"
-    id : Mapped[str] = mapped_column(String, primary_key=True, default=gen_uuid)
-    group_id : Mapped[str] = mapped_column(String, nullable=False, index=True)
-    started_by : Mapped[int] = mapped_column(Integer, nullable=False)
-    livekit_room_name : Mapped[str] = mapped_column(String, nullable=False)
-    started_at : Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    ended_at : Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    id = Column(String, primary_key=True, default=gen_uuid)
+    group_id = Column(String, ForeignKey("chat_groups.id"), nullable=False, index=True)
+    started_by = Column(String, ForeignKey("users.id"), nullable=False)
+    livekit_room_name = Column(String, nullable=False)
+    started_at = Column(DateTime, server_default=func.now())
+    ended_at = Column(DateTime, nullable=True)
 
 from pydantic import BaseModel, Field
 from typing import Optional, List
